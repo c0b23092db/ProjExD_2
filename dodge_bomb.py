@@ -19,11 +19,21 @@ def main():
     kk_rct.center = 900,400
     kk_speed = 5
     DELTA = {False:(0,0),pg.K_UP:(0,-kk_speed),pg.K_DOWN:(0,+kk_speed),pg.K_LEFT:(-kk_speed,0),pg.K_RIGHT:(+kk_speed,0)}
-    def kk_turn(x,y):
+    def kk_turn(x,y,set=0):
+        '''
+        set:0 -> pg.transform.rotozoom(pg.image.load("fig/3.png"),kk_rotozoom[x,y],2.0)
+        set:1 -> kk_rotozoom[x,y]
         kk_rotozoom = {(0,0):0,(0,-kk_speed):270,(0,+kk_speed):90,
                        (+kk_speed,-kk_speed):235,(+kk_speed,0):180,(+kk_speed,+kk_speed):135,
                        (-kk_speed,-kk_speed):315,(-kk_speed,+kk_speed):45,(-kk_speed,0):0}
-        return pg.transform.rotozoom(pg.image.load("fig/3.png"),kk_rotozoom[x,y],2.0)
+        '''
+        kk_rotozoom = {(0,0):0,(0,-kk_speed):270,(0,+kk_speed):90,
+                       (+kk_speed,-kk_speed):235,(+kk_speed,0):180,(+kk_speed,+kk_speed):135,
+                       (-kk_speed,-kk_speed):315,(-kk_speed,+kk_speed):45,(-kk_speed,0):0}
+        if set == 1:
+            return kk_rotozoom[x,y]
+        else:
+            return pg.transform.rotozoom(pg.image.load("fig/3.png"),kk_rotozoom[x,y],2.0)
     bomb = pg.Surface((20,20))
     pg.draw.circle(bomb,(255,0,0),(10,10),10)
     bomb.set_colorkey((0,0,0))
@@ -64,7 +74,6 @@ def main():
             kk_rct.move_ip(-kk_move[0],-kk_move[1])
 
         # エネミー
-
         if Vev or abs(kk_rct.x**2+kk_rct.y**2 - bomb_rct.x**2+bomb_rct.y**2) < 300:
             kk_x,kk_y = kk_rct.x,kk_rct.y
             vx,vy = update_position(kk_x,kk_y)
