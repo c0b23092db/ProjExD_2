@@ -19,6 +19,11 @@ def main():
     kk_rct.center = 900,400
     kk_speed = 5
     DELTA = {False:(0,0),pg.K_UP:(0,-kk_speed),pg.K_DOWN:(0,+kk_speed),pg.K_LEFT:(-kk_speed,0),pg.K_RIGHT:(+kk_speed,0)}
+    def kk_turn(x,y):
+        kk_rotozoom = {(0,0):0,(0,-kk_speed):270,(0,+kk_speed):90,
+                       (+kk_speed,-kk_speed):235,(+kk_speed,0):180,(+kk_speed,+kk_speed):135,
+                       (-kk_speed,-kk_speed):315,(-kk_speed,+kk_speed):45,(-kk_speed,0):0}
+        return pg.transform.rotozoom(pg.image.load("fig/3.png"),kk_rotozoom[x,y],2.0)
     bomb = pg.Surface((20,20))
     pg.draw.circle(bomb,(255,0,0),(10,10),10)
     bomb.set_colorkey((0,0,0))
@@ -51,6 +56,7 @@ def main():
             if key_lst[x]:
                 kk_move[0] += y[0]
                 kk_move[1] += y[1]
+        kk_img = kk_turn(kk_move[0],kk_move[1])
         kk_rct.move_ip(kk_move)
         if check_bound(kk_rct) != (True,True):
             kk_rct.move_ip(-kk_move[0],-kk_move[1])
