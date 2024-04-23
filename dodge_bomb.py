@@ -49,6 +49,8 @@ def main():
         vx *= 1 if check_bound(bomb_rct)[0] else -1
         vy *= 1 if check_bound(bomb_rct)[1] else -1
         pg.display.update()
+        if kk_rct.colliderect(bomb_rct):
+            return 0
         tmr += 1
         clock.tick(50)
 
