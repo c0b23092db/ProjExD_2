@@ -38,6 +38,8 @@ def main():
             pg.draw.circle(bomb_img, (255, 0, 0), (10*r, 10*r), 10*r)
             a += bomb_img
         print(a)
+    Vev = False
+    i = 0
     clock = pg.time.Clock()
     tmr = 0
     
@@ -62,10 +64,23 @@ def main():
             kk_rct.move_ip(-kk_move[0],-kk_move[1])
 
         # エネミー
-        vx *= 1 if check_bound(bomb_rct)[0] else -1
-        vy *= 1 if check_bound(bomb_rct)[1] else -1
-        bomb_rct.move_ip(vx,vy)
-        # bomb_rct.move_ip(update_position(bomb_rct,kk_rct))
+
+        if Vev or abs(kk_rct.x**2+kk_rct.y**2 - bomb_rct.x**2+bomb_rct.y**2) < 300:
+            kk_x,kk_y = kk_rct.x,kk_rct.y
+            vx,vy = update_position(kk_x,kk_y)
+            bomb_rct.move_ip(vx,vy)
+            if bomb_rct.x == kk_x or bomb_rct.y == kk_y:
+                i += 1
+                if 20 < i:
+                    i = 0
+                    Vev = False
+                else:
+                    update_position(vx,vy)
+            else:
+                Vev = True
+        else:
+            vx,vy = update_position(bomb_rct,kk_rct)
+            bomb_rct.move_ip(vx,vy)
 
         # 画面更新 #
         screen.blit(bg_img,[0,0])
@@ -99,12 +114,12 @@ def check_bound(obj,x=True,y=True):
     if obj.top < 0 or HEIGHT < obj.bottom :
         y = False
     return (x,y)
-def update_position(obj_k,obj_s,speed=50.0):
-        vector_x = obj_k.x - obj_s.x
-        vector_y = obj_k.y - obj_s.y
-        distance = (vector_x**2 + vector_y**2)**math.sqrt(speed)
-        speed_x = vector_x / distance
-        speed_y = vector_y / distance
+def update_position(obj_k,obj_s,speed=5):
+        vector_x = obj_s.x - obj_k.x
+        vector_y = obj_s.y - obj_k.y
+        distance = (vector_x**2 + vector_y**2)**0.5
+        speed_x = speed * vector_x / distance
+        speed_y = speed * vector_y / distance
         return (speed_x,speed_y)
 
 # 動作 #
