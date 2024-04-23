@@ -41,13 +41,23 @@ def main():
                 kk_move[0] += y[0]
                 kk_move[1] += y[1]
         kk_rct.move_ip(kk_move)
+        if check_bound(kk_rct) != (True,True):
+            kk_rct.move_ip(-kk_move[0],-kk_move[1])
         screen.blit(kk_img, kk_rct)
         bomb_rct.move_ip(vx,vy)
         screen.blit(bomb,bomb_rct)
+        vx *= 1 if check_bound(bomb_rct)[0] else -1
+        vy *= 1 if check_bound(bomb_rct)[1] else -1
         pg.display.update()
         tmr += 1
         clock.tick(50)
 
+def check_bound(obj,x=True,y=True):
+    if obj.left < 0 or WIDTH < obj.right:
+        x = False
+    if obj.top < 0 or HEIGHT < obj.bottom :
+        y = False
+    return (x,y)
 
 if __name__ == "__main__":
     pg.init()
