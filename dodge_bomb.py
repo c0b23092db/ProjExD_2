@@ -61,7 +61,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
-
+ 
         # プレイヤー #
         kk_move = [0,0]
         for x,y in DELTA.items():
